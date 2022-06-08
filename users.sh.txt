@@ -1,0 +1,36 @@
+#!/bin/bash
+
+
+#Variables
+Prefix=$1;
+Description=$2;
+
+
+if [[ "$Prefix" =~ [^a-zA-Z0-9] || -z "$1" ]]; then
+	echo "The prefix contains special character(s)"
+	echo "Please only provide alphanumeric characters for the prefix"
+	exit
+fi
+
+
+if ! [[ "$Description" =~ ^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$ ]]; then
+	echo "The description contains special character(s)"
+	echo "Please only provide alphanumeric characters for the description"
+        exit
+fi
+
+
+for ((i = 01 ; i <= 99 ; i++)); do
+	Password=$(openssl rand -base64 12) 
+
+	Homedir=$(printf $Prefix"user%02d" $i)
+	User_And_Group_ID=$((i + 1000))
+	printf $Prefix"user%02d" $i
+
+
+echo ":$Password:$User_And_Group_ID:$User_And_Group_ID:$Description:/home/$Homedir:/bin/bash"
+
+
+done
+
+
